@@ -104,3 +104,9 @@ pnpm run validate -- worlds/clubhouse.json
 pnpm run build
 pnpm run typecheck            # tsc --noEmit
 ```
+
+## Forking
+
+Forking is permitted, although keep in mind this may fragment the userbase. The search index can be overriden in HyperlinkVR in the "Sources" settings tab.
+
+When hosting a fork, configure caching on the manifest.json file to have a short TTL (such as 1 minute) and the search-index.json and by-slug.json to have a long TTL (e.g. a year). This allows HyperlinkVR to access the small manifest file frequently, using the build date as a cache bust for the indices, meaning they will only be fetched in full when necessary.
