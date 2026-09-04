@@ -8,7 +8,7 @@ import { fetch_metadata } from "./lib/fetch-metadata.js";
 import { to_document } from "./lib/extract.js";
 import {
     DIST_DIR, HOST_CONCURRENCY, PER_HOST_DELAY_MS, JITTER_MS, SUPPORTED_SCHEMA_VERSION,
-    MINISEARCH_FIELDS, MINISEARCH_STORE, MINISEARCH_SEARCH_OPTIONS, is_valid_slug, SLUG_RE
+    MINISEARCH_FIELDS, MINISEARCH_STORE, MINISEARCH_SEARCH_OPTIONS, is_valid_slug, SLUG_RE, MAX_SLUG_LENGTH
 } from "./lib/config.js";
 import type { WorldEntry, SearchDocument, FetchResult } from "./lib/types.js";
 
@@ -128,6 +128,7 @@ await writeFile(resolve(DIST_DIR, "manifest.json"), JSON.stringify({
     count: docs.length,
     schema_version: SUPPORTED_SCHEMA_VERSION,
     slug_pattern: SLUG_RE.source,
+    max_slug_length: MAX_SLUG_LENGTH,
     minisearch: {
         idField: "id",
         fields: MINISEARCH_FIELDS,

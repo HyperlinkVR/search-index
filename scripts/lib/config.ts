@@ -17,7 +17,8 @@ export const SUPPORTED_SCHEMA_VERSION = 1;
 export const METADATA_FILENAME = "hvr-world.json";
 
 export const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-export const is_valid_slug = (slug: string): boolean => SLUG_RE.test(slug);
+export const MAX_SLUG_LENGTH = 32;
+export const is_valid_slug = (slug: string): boolean => slug.length > 0 && slug.length <= MAX_SLUG_LENGTH && SLUG_RE.test(slug);
 
 
 export const USER_AGENT = "hvr-search-indexer/0.1 (+https://github.com/hyperlinkvr/search-index)";
