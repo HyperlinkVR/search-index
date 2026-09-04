@@ -70,6 +70,13 @@ export const fetch_metadata = async (entry: WorldEntry, snapshot: Snapshot | nul
         try {
             const res = await http_get(url, { conditional: false });
             if (!res.ok) {
+                if (res.status === 403) {
+                    const cf_ray = res.headers.get("cf-ray");
+                    const cf_mitigated = res.headers.get("cf-mitigated");
+                    errors.push(`${url} -> HTTP 403 (cf-mitigated: ${cf_mitigated}, cf-ray: ${cf_ray})`);
+                    continue;
+                }
+
                 errors.push(`${url} -> HTTP ${res.status}`);
                 continue;
             }
