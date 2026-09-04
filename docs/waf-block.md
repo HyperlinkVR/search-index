@@ -42,19 +42,50 @@ file that exists to be indexed anyway.
 
 ### Cloudflare
 
-Dashboard → your domain → **Security → WAF → Custom rules → Create rule**. Edit the
-expression and paste:
+We are in the process of applying for Verified Bot Status via Web Bot Auth, which would allow the indexer to bypass Bot Fight Mode without a custom rule.
+
+However, for now, if your world is behind Cloudflare Bot Fight Mode, you need to either turn it off or add a rule to skip the indexer.
+
+#### Free
+
+On the Free plan, Bot Fight Mode is **all-or-nothing**. It can't be skipped per-path or per
+user-agent with a custom rule (only *Super* Bot Fight Mode, on paid plans, can). So you have
+two free options.
+
+**Option A - Turn Bot Fight Mode off.** Dashboard → your domain → **Security → Bots** →
+toggle **Bot Fight Mode** off.
+
+- *Consequence:* it's disabled for your whole zone, not just `hvr-world.json`. Bot Fight Mode
+  is a blunt filter that mostly deters low-effort bots (determined scrapers bypass it anyway),
+  and your baseline DDoS protection stays on regardless. For a site serving public world
+  metadata this is usually a fine trade. If you want some protection back, add a WAF custom
+  rule or a rate-limiting rule scoped to sensitive paths instead of challenging everything.
+
+**Option B - Unproxy the metadata host.** Serve `hvr-world.json` from a hostname orm subdomain whose DNS
+record is set to **DNS only** (grey cloud) rather than **Proxied** (orange cloud), e.g. put
+it on a subdomain like `static.yourdomain.com` with a grey-clouded record and point your world
+URL there. Requests to a grey-clouded record skip Cloudflare's proxy entirely, so Bot Fight
+Mode never runs for them.
+
+- *Consequence:* that hostname loses **all** Cloudflare edge features. Bo Bot Fight Mode, but
+  also no DDoS mitigation, caching, or WAF, and it **exposes your origin server's IP** for
+  that record. Only grey-cloud a host you're comfortable exposing directly. The rest of your
+  zone keeps Bot Fight Mode.
+
+Option A is simpler and keeps Cloudflare's other protections. Option B is more specific (only
+the metadata host is affected) but exposes that host's origin.
+
+#### Pro, Business, Enterprise
+
+Dashboard → your domain → **Security → Security rules → Create rule → Custom rules**.
+
+Give your rule a name, then scroll to "When incoming requests match..." and select **Edit expression**. Paste the following:
 
 ```
 (http.request.uri.path wildcard "*/hvr-world.json" and http.user_agent contains "hvr-search-indexer")
 ```
 
-Action: **Skip** → tick **Bot Fight Mode** / **Super Bot Fight Mode** and any managed
-challenge → **Deploy**.
-
-> Using Cloudflare Pages/Workers or a plan without custom rules? Under **Security → Bots**,
-> Bot Fight Mode has no per-path exceptions on the Free plan - either turn it off, or upgrade
-> to Super Bot Fight Mode / WAF custom rules, which do support the Skip rule above.
+For "Then take action..." select **Skip** → tick **Bot Fight Mode** / **Super Bot Fight Mode** and any managed challenge → **Deploy**.
 
 ### AWS WAF
 
