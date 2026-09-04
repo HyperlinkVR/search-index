@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "description": "Community world search index for HyperlinkVR",
+  "packageManager": "pnpm@10.19.0",
   "engines": {
     "node": ">=20"
   },
