@@ -65,7 +65,7 @@ down for a bit, it keeps its last good snapshot instead of vanishing.
 ```ts
 import MiniSearch from "minisearch";
 
-const base = "https://hyperlink.surf/search-index";
+const base = "https://search.hyperlink.surf";
 const [json, manifest, by_slug] = await Promise.all([
   fetch(`${base}/search-index.json`).then(r => r.text()),
   fetch(`${base}/manifest.json`).then(r => r.json()),

@@ -51,6 +51,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./dist
+          cname: "search.hyperlink.surf"
           force_orphan: true
           commit_message: "chore: publish search index"
           user_name: "hvr-search-index[bot]"
