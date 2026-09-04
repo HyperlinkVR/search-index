@@ -1,4 +1,4 @@
-# hvr-search-index
+# Search index
 
 A community search index for HyperlinkVR worlds. You open a PR with a pointer to your
 world. CI then fetches the world's `hvr-world.json`, checks it, and builds a
