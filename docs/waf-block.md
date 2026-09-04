@@ -52,7 +52,7 @@ On the Free plan, Bot Fight Mode is **all-or-nothing**. It can't be skipped per-
 user-agent with a custom rule (only *Super* Bot Fight Mode, on paid plans, can). So you have
 two free options.
 
-**Option A - Turn Bot Fight Mode off.** Dashboard → your domain → **Security → Bots** →
+**Option A - Turn Bot Fight Mode off.** Dashboard → your domain → **Security → Settings** →
 toggle **Bot Fight Mode** off.
 
 - *Consequence:* it's disabled for your whole zone, not just `hvr-world.json`. Bot Fight Mode
