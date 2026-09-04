@@ -8,6 +8,7 @@ on:
       - "scripts/**"
       - "schema/**"
       - "pnpm-lock.yaml"
+      - "views/**"
   schedule:
     - cron: "17 * * * *" # hourly, offset off the hour to avoid the rush
   workflow_dispatch: {}

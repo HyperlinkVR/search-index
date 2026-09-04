@@ -82,7 +82,7 @@ const results = index.search("space station"); // each result carries the storeF
 const by_url = new Map(Object.values(by_slug).map(w => [w.url, w.slug]));
 
 const world = by_slug["space-station"];   // ^slug to a world
-const slug = by_url.get(someTile.url);    // a world tile back to its slug
+const slug = by_url.get(some_world.url);  // a world url back to its slug
 ```
 
 Each result already carries the stored fields (title, author, tags, thumbnail, url, and so

@@ -4,13 +4,13 @@
   "private": true,
   "type": "module",
   "description": "Community world search index for HyperlinkVR",
-  "packageManager": "pnpm@10.19.0",
+  "packageManager": "pnpm@11.19.0",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
     "validate": "tsx scripts/validate.ts",
-    "build": "tsx scripts/build.ts",
+    "build": "tsx scripts/build.ts && shx cp -r views/. dist/",
     "vendor-schema": "tsx scripts/vendor-schema.ts",
     "typecheck": "tsc --noEmit"
   },
@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "shx": "^0.4.0",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }
