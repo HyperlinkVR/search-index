@@ -105,10 +105,10 @@ const render_report = (results: FileResult[]): string => {
 
     for (const r of failed) {
         const d = r.diagnosis!;
-        lines.push(`### \`${r.file}\` — ${d.label}`, "");
+        lines.push(`### \`${r.file}\` - ${d.label}`, "");
         if (r.url) lines.push(`World URL: \`${r.url}\``, "");
         lines.push(d.explanation, "");
-        if (d.docs) lines.push(`[How to fix this →](${DOCS_BASE}/${d.docs})`, "");
+        if (d.docs) lines.push(`### [How to fix this →](${DOCS_BASE}/${d.docs})`, "");
     }
 
     return lines.join("\n");
