@@ -56,4 +56,4 @@ export type FetchResult =
           content_hash: string;
       }
     | { status: "not-modified"; metadata_url: string }
-    | { status: "error"; error: string };
+    | { status: "error"; error: string; http_status?: number };

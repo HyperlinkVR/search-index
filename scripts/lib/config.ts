@@ -20,6 +20,9 @@ export const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export const MAX_SLUG_LENGTH = 32;
 export const is_valid_slug = (slug: string): boolean => slug.length > 0 && slug.length <= MAX_SLUG_LENGTH && SLUG_RE.test(slug);
 
+// base url that per-issue explainer docs are linked from in PR comments
+// the CI workflow overrides this via DOCS_BASE_URL to point at the docs/ folder on the PR's target branch, this fallback is used for local runs
+export const DOCS_BASE_URL = "https://github.com/hyperlinkvr/search-index/blob/main/docs";
 
 export const USER_AGENT = "hvr-search-indexer/0.1 (+https://github.com/hyperlinkvr/search-index)";
 export const FETCH_TIMEOUT_MS = 15_000;

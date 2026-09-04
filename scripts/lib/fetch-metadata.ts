@@ -65,11 +65,15 @@ export const fetch_metadata = async (entry: WorldEntry, snapshot: Snapshot | nul
     }
 
     const errors: string[] = [];
+    // remember the first real HTTP status we saw so callers can categorise the failure
+    // candidates are ordered by likelihood, so the first HTTP answer is the most relevant one to report
+    let http_status: number | undefined;
 
     for (const url of candidates) {
         try {
             const res = await http_get(url, { conditional: false });
             if (!res.ok) {
+                if (http_status === undefined) http_status = res.status;
                 if (res.status === 403) {
                     const cf_ray = res.headers.get("cf-ray");
                     const cf_mitigated = res.headers.get("cf-mitigated");
@@ -85,5 +89,5 @@ export const fetch_metadata = async (entry: WorldEntry, snapshot: Snapshot | nul
             errors.push(`${url} -> ${err instanceof Error ? err.message : String(err)}`);
         }
     }
-    return { status: "error", error: `all candidates failed:\n${errors.join("\n")}` };
+    return { status: "error", error: `all candidates failed:\n${errors.join("\n")}`, http_status };
 };
