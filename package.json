@@ -1,0 +1,27 @@
+{
+  "name": "hvr-search-index",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Community world search index for HyperlinkVR",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "validate": "tsx scripts/validate.ts",
+    "build": "tsx scripts/build.ts",
+    "vendor-schema": "tsx scripts/vendor-schema.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "minisearch": "^7.1.2",
+    "p-limit": "^6.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

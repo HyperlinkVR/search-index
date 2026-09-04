@@ -1,0 +1,290 @@
+{
+  "$id": "https://hyperlink.surf/schemas/WorldMetadata_v1.json",
+  "version": 1,
+  "title": "HyperlinkVR - World Metadata (version 1)",
+  "description": "Metadata for a HyperlinkVR world, including title, description, author, and thumbnail. This schema is version 1.",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "default": "https://hyperlink.surf/schemas/WorldMetadata_v1.json",
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 32
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "social",
+        "game",
+        "art",
+        "music",
+        "education",
+        "utility",
+        "spatial_computing",
+        "other"
+      ]
+    },
+    "tags": {
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 16,
+        "pattern": "^[\\p{L}\\p{N}_-]+$"
+      }
+    },
+    "author": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 64
+        },
+        "signature": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "username"
+      ]
+    },
+    "additional_contributors": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "username": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 64
+              },
+              "signature": {
+                "type": "string"
+              },
+              "role": {
+                "default": "contributor",
+                "type": "string",
+                "enum": [
+                  "contributor",
+                  "co-owner",
+                  "developer",
+                  "designer",
+                  "artist",
+                  "musician",
+                  "tester",
+                  "manager",
+                  "social",
+                  "hosting",
+                  "shoutout",
+                  "other"
+                ]
+              }
+            },
+            "required": [
+              "username"
+            ]
+          },
+          {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 64
+          }
+        ]
+      }
+    },
+    "thumbnail": {
+      "type": "string"
+    },
+    "gallery": {
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "theme_color": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16777215
+        },
+        {
+          "type": "string",
+          "pattern": "^#([0-9a-fA-F]{6})$"
+        }
+      ]
+    },
+    "supports": {
+      "default": {
+        "vr": "maybe",
+        "flat": "maybe",
+        "low_power": "maybe",
+        "teleport": true
+      },
+      "type": "object",
+      "properties": {
+        "vr": {
+          "default": "maybe",
+          "type": "string",
+          "enum": [
+            "no",
+            "maybe",
+            "yes"
+          ]
+        },
+        "flat": {
+          "default": "maybe",
+          "type": "string",
+          "enum": [
+            "no",
+            "maybe",
+            "yes"
+          ]
+        },
+        "low_power": {
+          "default": "maybe",
+          "type": "string",
+          "enum": [
+            "no",
+            "maybe",
+            "yes"
+          ]
+        },
+        "teleport": {
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "languages": {
+      "default": "any",
+      "anyOf": [
+        {
+          "type": "string",
+          "const": "any"
+        },
+        {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "max_players": {
+      "default": 32,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 32
+    },
+    "recommended_players": {
+      "default": 8,
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 32
+    },
+    "content_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "cartoon_violence",
+          "realistic_violence",
+          "intense_violence",
+          "sexual_content",
+          "mild_horror",
+          "horror",
+          "drugs",
+          "strong_language",
+          "gambling",
+          "flashing_lights",
+          "loud_sounds",
+          "ugc",
+          "real_money",
+          "other"
+        ]
+      }
+    },
+    "vr_comfort": {
+      "type": "string",
+      "enum": [
+        "comfortable",
+        "moderate",
+        "intense"
+      ]
+    },
+    "preloads": {
+      "maxItems": 64,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "endorsements": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri"
+    },
+    "repo": {
+      "type": "string",
+      "format": "uri"
+    },
+    "license_spdx": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "version",
+    "title"
+  ],
+  "if": {
+    "properties": {
+      "recommended_players": {
+        "type": "number"
+      },
+      "max_players": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "recommended_players",
+      "max_players"
+    ]
+  },
+  "then": {
+    "properties": {
+      "recommended_players": {
+        "type": "number",
+        "maximum": {
+          "$data": "1/max_players"
+        }
+      }
+    }
+  }
+}

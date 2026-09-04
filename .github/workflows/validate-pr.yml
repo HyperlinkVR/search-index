@@ -1,0 +1,39 @@
+name: validate-pr
+
+on:
+  pull_request:
+    paths:
+      - "worlds/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # need the base commit to diff against
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Determine changed world entries
+        id: changed
+        run: |
+          base="${{ github.event.pull_request.base.sha }}"
+          files=$(git diff --name-only --diff-filter=d "$base" HEAD -- 'worlds/*.json' | tr '\n' ' ')
+          echo "files=$files" >> "$GITHUB_OUTPUT"
+          echo "changed: $files"
+
+      - name: Validate changed entries
+        env:
+          FILES: ${{ steps.changed.outputs.files }}
+        run: pnpm run validate -- $FILES

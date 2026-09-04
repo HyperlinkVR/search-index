@@ -1,0 +1,57 @@
+name: build-index
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "worlds/**"
+      - "scripts/**"
+      - "schema/**"
+      - "pnpm-lock.yaml"
+  schedule:
+    - cron: "17 * * * *" # hourly, offset off the hour to avoid the rush
+  workflow_dispatch: {}
+
+# one build at a time to let an in-flight build finish rather than cancelling mid fetch
+concurrency:
+  group: build-index
+  cancel-in-progress: false
+
+permissions:
+  contents: write # push the built index to the gh-pages branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Restore snapshot cache
+        uses: actions/cache@v4
+        with:
+          path: snapshots
+          key: snapshots-${{ github.run_id }}
+          restore-keys: |
+            snapshots-
+
+      - run: pnpm run build
+
+      - name: Publish index to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          force_orphan: true
+          commit_message: "chore: publish search index"
+          user_name: "hvr-search-index[bot]"
+          user_email: "41898282+github-actions[bot]@users.noreply.github.com"
