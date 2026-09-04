@@ -59,18 +59,24 @@ export const fetch_metadata = async (entry: WorldEntry, snapshot: Snapshot | nul
         }
     }
 
-    let last_error = "no reachable hvr-world.json";
-    for (const url of metadata_candidates(entry.url)) {
+    const candidates = metadata_candidates(entry.url);
+    if (candidates.length === 0) {
+        return { status: "error", error: `no metadata candidates for ${entry.url}` };
+    }
+
+    const errors: string[] = [];
+
+    for (const url of candidates) {
         try {
             const res = await http_get(url, { conditional: false });
             if (!res.ok) {
-                last_error = `${url} -> HTTP ${res.status}`;
+                errors.push(`${url} -> HTTP ${res.status}`);
                 continue;
             }
             return await parse_response(res, url);
         } catch (err) {
-            last_error = `${url} -> ${err instanceof Error ? err.message : String(err)}`;
+            errors.push(`${url} -> ${err instanceof Error ? err.message : String(err)}`);
         }
     }
-    return { status: "error", error: last_error };
+    return { status: "error", error: `all candidates failed:\n${errors.join("\n")}` };
 };
