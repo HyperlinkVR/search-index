@@ -127,7 +127,7 @@ await writeFile(resolve(DIST_DIR, "search-index.json"), JSON.stringify(mini) + "
 const by_slug = Object.fromEntries(
     [...docs]
         .sort((a, b) => a.id.localeCompare(b.id))   // stable key order for clean diffs / prefix scans
-        .map(d => [d.id, { slug: d.id, title: d.title, author: d.author, url: d.url, thumbnail: d.thumbnail }])
+        .map(d => [d.id, { slug: d.id, title: d.title, author: d.author, author_sig: d.author_sig, url: d.url, thumbnail: d.thumbnail }])
 );
 await writeFile(resolve(DIST_DIR, "by-slug.json"), JSON.stringify(by_slug) + "\n");
 await writeFile(resolve(DIST_DIR, "manifest.json"), JSON.stringify({
