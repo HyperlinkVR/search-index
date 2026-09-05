@@ -5,12 +5,13 @@ import { resolve } from "node:path";
 import { get_validator, format_errors } from "./lib/schema.js";
 import { read_entries, read_snapshot, write_snapshot } from "./lib/entries.js";
 import { fetch_metadata } from "./lib/fetch-metadata.js";
-import { to_document } from "./lib/extract.js";
+import {does_snapshot_have_all_doc_fields, to_document} from "./lib/extract.js";
 import {
     DIST_DIR, HOST_CONCURRENCY, PER_HOST_DELAY_MS, JITTER_MS, SUPPORTED_SCHEMA_VERSION,
     MINISEARCH_FIELDS, MINISEARCH_STORE, MINISEARCH_SEARCH_OPTIONS, is_valid_slug, SLUG_RE, MAX_SLUG_LENGTH
 } from "./lib/config.js";
 import type { WorldEntry, SearchDocument, FetchResult } from "./lib/types.js";
+import * as console from "node:console";
 
 const sleep = (ms: number): Promise<void> => new Promise(r => setTimeout(r, ms));
 const host_of = (url: string): string => { try { return new URL(url).host; } catch { return url; } };
@@ -28,7 +29,13 @@ const stats = { fresh: 0, unchanged: 0, stale_kept: 0, dropped: 0, skipped: all_
 const docs: SearchDocument[] = [];
 
 const process_entry = async (entry: WorldEntry): Promise<void> => {
-    const prior = await read_snapshot(entry.slug);
+    let prior = await read_snapshot(entry.slug);
+
+    // if any output fields are missing from the prior snapshot, treat it as if we have no prior snapshot so we can re-fetch and rebuild the doc
+    if (!does_snapshot_have_all_doc_fields(prior)) {
+        console.log(`! ${entry.slug}: prior snapshot missing some output fields, will re-fetch and rebuild doc`);
+        prior = null;
+    }
 
     let result: FetchResult;
     try {
