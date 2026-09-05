@@ -5,6 +5,7 @@ export interface WorldEntry {
 
 export interface WorldAuthor {
     username?: string;
+    signature?: string;
 }
 
 export interface WorldMetadata {
@@ -23,6 +24,7 @@ export interface SearchDocument {
     id: string;
     title: string;
     author: string;
+    author_sig: string;
     tags: string[];
     tags_text: string;
     description: string;

@@ -6,6 +6,7 @@ export const to_document = (entry: WorldEntry, metadata: WorldMetadata): SearchD
         id: entry.slug,
         title: metadata.title ?? "",
         author: metadata.author?.username ?? "",
+        author_sig: metadata.author?.signature ?? "",
         tags,
         tags_text: tags.join(" "),
         description: metadata.description ?? "",

@@ -32,7 +32,7 @@ export const JITTER_MS = 250;
 
 
 export const MINISEARCH_FIELDS = ["title", "author", "tags_text", "description", "url"];
-export const MINISEARCH_STORE = ["title", "author", "tags", "description", "category", "thumbnail", "url"];
+export const MINISEARCH_STORE = ["title", "author", "author_sig", "tags", "description", "category", "thumbnail", "url"];
 export const MINISEARCH_SEARCH_OPTIONS = {
     boost: { title: 4, tags_text: 3, author: 2, description: 1, url: 1 },
     prefix: true,
