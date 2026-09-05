@@ -66,10 +66,14 @@ down for a bit, it keeps its last good snapshot instead of vanishing.
 import MiniSearch from "minisearch";
 
 const base = "https://search.hyperlink.surf";
-const [json, manifest, by_slug] = await Promise.all([
-  fetch(`${base}/search-index.json`).then(r => r.text()),
-  fetch(`${base}/manifest.json`).then(r => r.json()),
-  fetch(`${base}/by-slug.json`).then(r => r.json())
+
+const manifest = await fetch("/manifest.json").then(r => r.json());
+const version = encodeURIComponent(manifest.built_at);
+
+// cache bust indices
+const [json, by_slug] = await Promise.all([
+  fetch(`/search-index.json?v=${version}`).then(r => r.text()),
+  fetch(`/by-slug.json?v=${version}`).then(r => r.json())
 ]);
 
 // load with the same options the build used (they're in manifest.minisearch)
