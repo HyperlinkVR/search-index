@@ -1,0 +1,38 @@
+{
+  "built_at": "2026-09-06T23:56:27.203Z",
+  "count": 3,
+  "schema_version": 1,
+  "slug_pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+  "max_slug_length": 32,
+  "minisearch": {
+    "idField": "id",
+    "fields": [
+      "title",
+      "author",
+      "tags_text",
+      "description",
+      "url"
+    ],
+    "storeFields": [
+      "title",
+      "author",
+      "author_sig",
+      "tags",
+      "description",
+      "category",
+      "thumbnail",
+      "url"
+    ],
+    "searchOptions": {
+      "boost": {
+        "title": 4,
+        "tags_text": 3,
+        "author": 2,
+        "description": 1,
+        "url": 1
+      },
+      "prefix": true,
+      "fuzzy": 0.2
+    }
+  }
+}
