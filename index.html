@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>HyperlinkVR Worlds Search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        body { max-width: 800px; margin: auto; padding: 2rem; }
+    </style>
+</head>
+<body>
+<main>
+    <h1>HyperlinkVR Worlds Search</h1>
+    <input type="search" id="query" placeholder="Search worlds...">
+    <ul id="results"></ul>
+</main>
+<script type="module">
+    import MiniSearch from "https://cdn.jsdelivr.net/npm/minisearch@7.2.0/+esm";
+
+    const manifest = await fetch("/manifest.json").then(r => r.json());
+    const version = encodeURIComponent(manifest.built_at);
+
+    // cache bust indices
+    const [json, by_slug] = await Promise.all([
+        fetch(`/search-index.json?v=${version}`).then(r => r.text()),
+        fetch(`/by-slug.json?v=${version}`).then(r => r.json())
+    ]);
+
+    // load with the same options the build used (they're in manifest.minisearch)
+    const index = MiniSearch.loadJSON(json, manifest.minisearch);
+    const results_el = document.getElementById("results");
+
+    document.getElementById("query").addEventListener("input", e => {
+        const query = e.target.value.trim();
+        results_el.innerHTML = "";
+
+        if (!query) return;
+
+        const results = index.search(query);
+        for (const r of results) {
+            const info = by_slug[r.id];
+            const li = document.createElement("li");
+            const a = document.createElement("a");
+            a.href = info.url;
+            a.innerText = info.title;
+            li.appendChild(a);
+            results_el.appendChild(li);
+        }
+    });
+</script>
+</body>
+</html>
